@@ -3,12 +3,14 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using EvidenceKnih.Data;
 using EvidenceKnih.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -43,11 +45,16 @@ namespace EvidenceKnih
                         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(Configuration["Jwt:SecretKey"]))
                     };
                 });
-            
+
             services.AddSingleton<ITokenAuthService, TokenAuthService>();
 
             services.AddControllers();
-            
+
+            services.AddDbContext<EvidenceKnihContext>(opt =>
+            {
+                opt.UseSqlServer(Configuration.GetConnectionString("EvidenceKnih"));
+            });
+
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
