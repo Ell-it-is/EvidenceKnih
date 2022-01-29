@@ -13,6 +13,6 @@ namespace Contracts.Database
         public int BookCategoryId { get; set; }
         public int LanguageCategoryId { get; set; }
         public decimal Price { get; set; }
-        public int Quantity { get; set; }
+        public int Quantity { get; set; } //could be another table that would store bookId - quantity
     }
 }
