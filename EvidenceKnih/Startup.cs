@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using EvidenceKnih.Data;
 using EvidenceKnih.Services;
@@ -47,8 +48,13 @@ namespace EvidenceKnih
                 });
 
             services.AddSingleton<ITokenAuthService, TokenAuthService>();
+            services.AddScoped<IBookManagment, BookManagment>();
 
-            services.AddControllers();
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
 
             services.AddDbContext<EvidenceKnihContext>(opt =>
             {

@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Contracts.Api.Requests;
 using Contracts.Api.Responses;
+using Contracts.Database.Enums;
 using EvidenceKnih.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -13,17 +15,21 @@ using Microsoft.Extensions.Options;
 namespace EvidenceKnih.Controllers
 {
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v1/")]
     public class BookManagementController : ControllerBase
     {
         private readonly ILogger<BookManagementController> _logger;
+        private readonly IBookManagment _bookManagment;
         private readonly ITokenAuthService _tokenAuthService;
 
-        public BookManagementController(ILogger<BookManagementController> logger, 
+        public BookManagementController(
+            ILogger<BookManagementController> logger, 
+            IBookManagment bookManagment,
             ITokenAuthService tokenAuthService)
         {
             _logger = logger;
+            _bookManagment = bookManagment;
             _tokenAuthService = tokenAuthService;
         }
 
@@ -39,33 +45,67 @@ namespace EvidenceKnih.Controllers
         }
 
         [HttpPost(nameof(CreateBook))]
-        public ActionResult<int> CreateBook()
+        public ActionResult CreateBook([FromBody] BookBaseRequest baseRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
         {
-            return 1;
+            var bookCreateRequest = new BookCreateRequest()
+            {
+                Title = baseRequest.Title,
+                Author = baseRequest.Author,
+                Description = baseRequest.Description,
+                NumberOfPages = baseRequest.NumberOfPages,
+                ReleaseDate = baseRequest.ReleaseDate,
+                Price = baseRequest.NumberOfPages,
+                BookCategory = bookCategory,
+                LanguageCategory = languageCategory
+            };
+            
+            _bookManagment.CreateBook(bookCreateRequest);
+
+            return Ok();
         }
 
         [HttpGet(nameof(GetBook))]
         public ActionResult<BookResponse> GetBook(int id)
         {
-            return new BookResponse();
+            var book = _bookManagment.GetBook(id);
+
+            return Ok(book);
         }
         
         [HttpGet(nameof(GetBooks))]
         public ActionResult<IEnumerable<BookResponse>> GetBooks()
         {
-            return new List<BookResponse>();
+            var books = _bookManagment.GetBooks();
+
+            return Ok(books);
         }
 
         [HttpPut(nameof(UpdateBook))]
-        public ActionResult<int> UpdateBook()
+        public ActionResult UpdateBook([FromBody] BookBaseRequest baseRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
         {
-            return 1;
+            var bookUpdateRequest = new BookUpdateRequest()
+            {
+                Title = baseRequest.Title,
+                Author = baseRequest.Author,
+                Description = baseRequest.Description,
+                NumberOfPages = baseRequest.NumberOfPages,
+                ReleaseDate = baseRequest.ReleaseDate,
+                Price = baseRequest.NumberOfPages,
+                BookCategory = bookCategory,
+                LanguageCategory = languageCategory
+            };
+            
+            _bookManagment.UpdateBook(bookUpdateRequest);
+
+            return Ok();
         }
 
         [HttpDelete(nameof(DeleteBook))]
-        public ActionResult<int> DeleteBook()
+        public ActionResult DeleteBook(int id)
         {
-            return Ok(1);
+            _bookManagment.DeleteBook(id);
+
+            return Ok();
         }
     }
 }
