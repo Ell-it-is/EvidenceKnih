@@ -52,7 +52,7 @@ namespace EvidenceKnih.Data
             var book = _context.Books.FirstOrDefault(book => book.Id == id);
             if (book == null)
             {
-                response.ErrorResponse.Errors.Add(new ErrorModel(nameof(book), "Kniha dle zadaného id nebyla nalezena."));
+                response.ErrorResponse.Errors.Add(new ErrorModel(nameof(id), "Kniha dle zadaného id nebyla nalezena."));
                 return response;
             }
             if (book.BookStock.Quantity == 0)
@@ -77,7 +77,7 @@ namespace EvidenceKnih.Data
             var bookToUpdate = _context.Books.FirstOrDefault(book => book.Id == updateRequest.Id);
             if (bookToUpdate == null)
             {
-                response.ErrorResponse.Errors.Add(new ErrorModel(nameof(bookToUpdate), "Kniha dle zadaného id nebyla nalezena."));
+                response.ErrorResponse.Errors.Add(new ErrorModel(nameof(updateRequest.Id), "Kniha dle zadaného id nebyla nalezena."));
                 return response;
             }
             
@@ -103,7 +103,7 @@ namespace EvidenceKnih.Data
             var bookToDelete = _context.Books.FirstOrDefault(book => book.Id == id);
             if (bookToDelete == null)
             {
-                response.ErrorResponse.Errors.Add(new ErrorModel(nameof(bookToDelete), "Kniha dle zadaného id nebyla nalezena."));
+                response.ErrorResponse.Errors.Add(new ErrorModel(nameof(id), "Kniha dle zadaného id nebyla nalezena."));
                 return response;
             }
 
