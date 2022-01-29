@@ -32,12 +32,12 @@ namespace EvidenceKnih.Data
                 BookCategory = createRequest.BookCategory,
                 LanguageCategory = createRequest.LanguageCategory,
             });
-
-            _context.Stocks.Add(new Stock()
+            
+            book.Entity.BookStock = new BookStock()
             {
                 Book = book.Entity,
-                Quantity = createRequest.Quantity ?? 1
-            });
+                Quantity = createRequest.Quantity
+            };
 
             _context.SaveChanges();
             
@@ -55,11 +55,9 @@ namespace EvidenceKnih.Data
                 response.ErrorResponse.Errors.Add(new ErrorModel(nameof(book), "Kniha dle zadaného id nebyla nalezena."));
                 return response;
             }
-            
-            bool inStock = _context.Stocks.FirstOrDefault(stock => stock.Book == book)?.Quantity > 0;
-            if (!inStock)
+            if (book.BookStock.Quantity == 0)
             {
-                response.ErrorResponse.Errors.Add(new ErrorModel(nameof(inStock), "Kniha není na skladě."));
+                response.ErrorResponse.Errors.Add(new ErrorModel(nameof(book.BookStock.Quantity), "Kniha není na skladě."));
                 return response;
             }
             
@@ -67,9 +65,9 @@ namespace EvidenceKnih.Data
             return response;
         }
 
-        public IEnumerable<BookResponse> GetBooks()
+        public IEnumerable<BookResponse> GetBooksInStock()
         {
-            return _context.Books.Select(MapBookToBookResponse).ToList();
+            return _context.Books.Where(b => b.BookStock.Quantity > 0).ToList().Select(MapBookToBookResponse);
         }
 
         public UpdateBookResponse UpdateBook(BookUpdateRequest updateRequest)
@@ -91,9 +89,7 @@ namespace EvidenceKnih.Data
             bookToUpdate.Price = updateRequest.Price;
             bookToUpdate.BookCategory = updateRequest.BookCategory;
             bookToUpdate.LanguageCategory = updateRequest.LanguageCategory;
-
-            var stock = _context.Stocks.FirstOrDefault(stock => stock.Book == bookToUpdate);
-            if (stock != null) stock.Quantity = updateRequest.Quantity ?? 1;
+            bookToUpdate.BookStock.Quantity = updateRequest.Quantity;
 
             _context.SaveChanges();
 
@@ -111,13 +107,6 @@ namespace EvidenceKnih.Data
                 return response;
             }
 
-            bool inStock = _context.Stocks.FirstOrDefault(stock => stock.Book == bookToDelete)?.Quantity > 0;
-            if(!inStock)
-            {
-                response.ErrorResponse.Errors.Add(new ErrorModel(nameof(inStock), "Kniha není na skladě."));
-                return response;
-            }
-            
             _context.Books.Remove(bookToDelete);
 
             _context.SaveChanges();
@@ -127,8 +116,6 @@ namespace EvidenceKnih.Data
         
         private BookResponse MapBookToBookResponse(Book book)
         {
-            var stock = _context.Stocks.FirstOrDefault(stock => stock.Book == book);
-
             return new BookResponse()
             {
                 Title = book.Title,
@@ -139,7 +126,7 @@ namespace EvidenceKnih.Data
                 Price = book.Price,
                 BookCategory = book.BookCategory,
                 LanguageCategory = book.LanguageCategory,
-                Quantity = stock?.Quantity ?? 0
+                Quantity = book.BookStock.Quantity
             };
         }
     }

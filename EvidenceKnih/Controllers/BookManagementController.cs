@@ -66,7 +66,7 @@ namespace EvidenceKnih.Controllers
             
             _bookManagment.CreateBook(bookCreateRequest);
 
-            return Ok();
+            return Ok("Kniha vytvořena.");
         }
 
         [HttpGet(nameof(GetBook))]
@@ -79,10 +79,10 @@ namespace EvidenceKnih.Controllers
             return Ok(book.BookResponse);
         }
         
-        [HttpGet(nameof(GetBooks))]
-        public ActionResult<IEnumerable<BookResponse>> GetBooks()
+        [HttpGet(nameof(GetBooksInStock))]
+        public ActionResult<IEnumerable<BookResponse>> GetBooksInStock()
         {
-            var books = _bookManagment.GetBooks();
+            var books = _bookManagment.GetBooksInStock();
 
             return Ok(books);
         }
@@ -108,7 +108,7 @@ namespace EvidenceKnih.Controllers
             
             if (response.ErrorResponse.Errors.Any()) return NotFound(response.ErrorResponse);
 
-            return Ok();
+            return Ok("Kniha aktualizována.");
         }
 
         [HttpDelete(nameof(DeleteBook))]
@@ -118,7 +118,7 @@ namespace EvidenceKnih.Controllers
             
             if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
 
-            return Ok();
+            return Ok("Kniha smazána.");
         }
     }
 }

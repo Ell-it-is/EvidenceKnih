@@ -29,5 +29,7 @@ namespace Contracts.Database
         public EnumLanguageCategory LanguageCategory { get; set; }
         
         public decimal Price { get; set; }
+        
+        public virtual BookStock BookStock { get; set; }
     }
 }

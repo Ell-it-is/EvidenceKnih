@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.ComponentModel.DataAnnotations;
 using Contracts.Database;
 using Contracts.Database.Enums;
@@ -16,6 +17,7 @@ namespace Contracts.Api.Requests
         public int NumberOfPages { get; set; }
         public DateTime ReleaseDate { get; set; } //(I could add available property for books that are not yet released)
         public decimal Price { get; set; }
-        public int? Quantity { get; set; }
+        [DefaultValue(1)]
+        public int Quantity { get; set; }
     }
 }

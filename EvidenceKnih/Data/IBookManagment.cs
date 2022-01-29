@@ -11,7 +11,7 @@ namespace EvidenceKnih.Data
 
         GetBookResponse GetBook(int id);
 
-        IEnumerable<BookResponse> GetBooks();
+        IEnumerable<BookResponse> GetBooksInStock();
 
         UpdateBookResponse UpdateBook(BookUpdateRequest updateRequest);
 

@@ -4,6 +4,6 @@ namespace Contracts.Api.Responses
 {
     public class UpdateBookResponse
     {
-        public ErrorResponse ErrorResponse { get; set; }
+        public ErrorResponse ErrorResponse { get; set; } = new();
     }
 }

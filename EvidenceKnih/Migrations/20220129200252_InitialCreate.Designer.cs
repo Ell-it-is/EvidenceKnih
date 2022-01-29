@@ -10,7 +10,7 @@ using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 namespace EvidenceKnih.Migrations
 {
     [DbContext(typeof(EvidenceKnihContext))]
-    [Migration("20220129160534_InitialCreate")]
+    [Migration("20220129200252_InitialCreate")]
     partial class InitialCreate
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -60,7 +60,7 @@ namespace EvidenceKnih.Migrations
                     b.ToTable("Books");
                 });
 
-            modelBuilder.Entity("Contracts.Database.Stock", b =>
+            modelBuilder.Entity("Contracts.Database.BookStock", b =>
                 {
                     b.Property<int>("BookStockId")
                         .HasColumnType("int");
@@ -73,15 +73,20 @@ namespace EvidenceKnih.Migrations
                     b.ToTable("Stocks");
                 });
 
-            modelBuilder.Entity("Contracts.Database.Stock", b =>
+            modelBuilder.Entity("Contracts.Database.BookStock", b =>
                 {
                     b.HasOne("Contracts.Database.Book", "Book")
-                        .WithMany()
-                        .HasForeignKey("BookStockId")
+                        .WithOne("BookStock")
+                        .HasForeignKey("Contracts.Database.BookStock", "BookStockId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("Book");
+                });
+
+            modelBuilder.Entity("Contracts.Database.Book", b =>
+                {
+                    b.Navigation("BookStock");
                 });
 #pragma warning restore 612, 618
         }

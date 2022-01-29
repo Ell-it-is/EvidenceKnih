@@ -58,6 +58,7 @@ namespace EvidenceKnih
 
             services.AddDbContext<EvidenceKnihContext>(opt =>
             {
+                opt.UseLazyLoadingProxies();
                 opt.UseSqlServer(Configuration.GetConnectionString("EvidenceKnih"));
             });
 

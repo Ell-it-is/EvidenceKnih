@@ -3,13 +3,13 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Contracts.Database
 {
-    public class Stock
+    public class BookStock
     {
-        [Key, ForeignKey("Book")]
+        [ForeignKey("Book")]
         public int BookStockId { get; set; }
-
-        public Book Book { get; set; }
         
         public int Quantity { get; set; }
+        
+        public virtual Book Book { get; set; }
     }
 }

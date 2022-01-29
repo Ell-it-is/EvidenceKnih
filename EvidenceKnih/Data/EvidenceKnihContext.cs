@@ -11,6 +11,6 @@ namespace EvidenceKnih.Data
         }
 
         public DbSet<Book> Books { get; set; }
-        public DbSet<Stock> Stocks { get; set; }
+        public DbSet<BookStock> Stocks { get; set; }
     }
 }

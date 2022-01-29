@@ -6,6 +6,6 @@ namespace Contracts.Api.Responses
     {
         public BookResponse BookResponse { get; set; }
 
-        public ErrorResponse ErrorResponse { get; set; } = new ErrorResponse();
+        public ErrorResponse ErrorResponse { get; set; } = new();
     }
 }
