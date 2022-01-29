@@ -5,12 +5,14 @@ using System.Linq;
 using System.Threading.Tasks;
 using Contracts.Api.Requests;
 using Contracts.Api.Responses;
+using Contracts.Api.Responses.Common;
 using Contracts.Database.Enums;
 using EvidenceKnih.Data;
 using EvidenceKnih.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
 using Microsoft.Extensions.Options;
 
@@ -57,8 +59,9 @@ namespace EvidenceKnih.Controllers
                 NumberOfPages = baseRequest.NumberOfPages,
                 ReleaseDate = baseRequest.ReleaseDate,
                 Price = baseRequest.NumberOfPages,
+                Quantity = baseRequest.Quantity,
                 BookCategory = bookCategory,
-                LanguageCategory = languageCategory
+                LanguageCategory = languageCategory,
             };
             
             _bookManagment.CreateBook(bookCreateRequest);
@@ -67,11 +70,13 @@ namespace EvidenceKnih.Controllers
         }
 
         [HttpGet(nameof(GetBook))]
-        public ActionResult<BookResponse> GetBook([Required] int id)
+        public ActionResult<CreateBookResponse> GetBook([Required] int id)
         {
             var book = _bookManagment.GetBook(id);
 
-            return Ok(book);
+            if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
+
+            return Ok(book.BookResponse);
         }
         
         [HttpGet(nameof(GetBooks))]
@@ -94,11 +99,14 @@ namespace EvidenceKnih.Controllers
                 NumberOfPages = updateRequest.NumberOfPages,
                 ReleaseDate = updateRequest.ReleaseDate,
                 Price = updateRequest.NumberOfPages,
+                Quantity = updateRequest.Quantity,
                 BookCategory = bookCategory,
                 LanguageCategory = languageCategory
             };
             
-            _bookManagment.UpdateBook(bookUpdateRequest);
+            var response = _bookManagment.UpdateBook(bookUpdateRequest);
+            
+            if (response.ErrorResponse.Errors.Any()) return NotFound(response.ErrorResponse);
 
             return Ok();
         }

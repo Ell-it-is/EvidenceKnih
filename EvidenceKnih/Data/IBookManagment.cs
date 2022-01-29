@@ -1,19 +1,20 @@
 ﻿using System.Collections.Generic;
 using Contracts.Api.Requests;
 using Contracts.Api.Responses;
+using Contracts.Api.Responses.Common;
 
 namespace EvidenceKnih.Data
 {
     public interface IBookManagment
     {
-        void CreateBook(BookCreateRequest createRequest);
+        CreateBookResponse CreateBook(BookCreateRequest createRequest);
 
-        BookResponse GetBook(int id);
+        GetBookResponse GetBook(int id);
 
         IEnumerable<BookResponse> GetBooks();
 
-        void UpdateBook(BookUpdateRequest updateRequest);
+        UpdateBookResponse UpdateBook(BookUpdateRequest updateRequest);
 
-        void DeleteBook(int id);
+        DeleteBookResponse DeleteBook(int id);
     }
 }

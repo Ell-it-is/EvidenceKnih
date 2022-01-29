@@ -1,8 +1,7 @@
 ﻿using System;
-using Contracts.Database;
 using Contracts.Database.Enums;
 
-namespace Contracts.Api.Responses
+namespace Contracts.Api.Responses.Common
 {
     public class BookResponse
     {
