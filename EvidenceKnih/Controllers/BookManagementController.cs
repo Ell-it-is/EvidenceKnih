@@ -114,7 +114,9 @@ namespace EvidenceKnih.Controllers
         [HttpDelete(nameof(DeleteBook))]
         public ActionResult DeleteBook([Required] int id)
         {
-            _bookManagment.DeleteBook(id);
+            var book = _bookManagment.DeleteBook(id);
+            
+            if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
 
             return Ok();
         }

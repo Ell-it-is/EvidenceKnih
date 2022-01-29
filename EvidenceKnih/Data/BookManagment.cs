@@ -56,7 +56,7 @@ namespace EvidenceKnih.Data
                 return response;
             }
             
-            bool inStock = _context.Stocks.FirstOrDefault(stock => stock.Book == book)?.Quantity != 0;
+            bool inStock = _context.Stocks.FirstOrDefault(stock => stock.Book == book)?.Quantity > 0;
             if (!inStock)
             {
                 response.ErrorResponse.Errors.Add(new ErrorModel(nameof(inStock), "Kniha není na skladě."));
