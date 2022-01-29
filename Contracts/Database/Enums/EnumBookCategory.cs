@@ -1,4 +1,4 @@
-﻿namespace Contracts.Database
+﻿namespace Contracts.Database.Enums
 {
     public enum EnumBookCategory
     {

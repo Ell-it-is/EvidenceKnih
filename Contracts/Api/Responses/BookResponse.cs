@@ -1,5 +1,6 @@
 ﻿using System;
 using Contracts.Database;
+using Contracts.Database.Enums;
 
 namespace Contracts.Api.Responses
 {
