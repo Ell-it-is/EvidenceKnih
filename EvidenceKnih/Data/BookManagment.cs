@@ -1,13 +1,10 @@
-﻿using System.Collections;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Contracts.Api.Requests;
 using Contracts.Api.Responses;
 using Contracts.Database;
-using Contracts.Database.Enums;
-using EvidenceKnih.Data;
 
-namespace EvidenceKnih.Services
+namespace EvidenceKnih.Data
 {
     public class BookManagment : IBookManagment
     {
@@ -38,9 +35,8 @@ namespace EvidenceKnih.Services
         public BookResponse GetBook(int id)
         {
             var book = _context.Books.FirstOrDefault(book => book.Id == id);
-            if (book == null) return new BookResponse();
 
-            return MapBookToBookResponse(book);
+            return book == null ? null : MapBookToBookResponse(book);
         }
 
         public IEnumerable<BookResponse> GetBooks()

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using Contracts.Api.Requests;
 using Contracts.Api.Responses;
-using Contracts.Database.Enums;
 
-namespace EvidenceKnih.Services
+namespace EvidenceKnih.Data
 {
     public interface IBookManagment
     {

@@ -7,6 +7,7 @@ namespace Contracts.Api.Requests
 {
     public class BookUpdateRequest : BookBaseRequest
     {
+        [Required]
         public int Id { get; set; }
         
         public EnumBookCategory BookCategory { get; set; }

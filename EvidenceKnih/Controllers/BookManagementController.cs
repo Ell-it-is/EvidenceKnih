@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.Linq;
 using System.Threading.Tasks;
 using Contracts.Api.Requests;
 using Contracts.Api.Responses;
 using Contracts.Database.Enums;
+using EvidenceKnih.Data;
 using EvidenceKnih.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
@@ -65,7 +67,7 @@ namespace EvidenceKnih.Controllers
         }
 
         [HttpGet(nameof(GetBook))]
-        public ActionResult<BookResponse> GetBook(int id)
+        public ActionResult<BookResponse> GetBook([Required] int id)
         {
             var book = _bookManagment.GetBook(id);
 
@@ -81,16 +83,17 @@ namespace EvidenceKnih.Controllers
         }
 
         [HttpPut(nameof(UpdateBook))]
-        public ActionResult UpdateBook([FromBody] BookBaseRequest baseRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
+        public ActionResult UpdateBook([FromBody] BookUpdateRequest updateRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
         {
             var bookUpdateRequest = new BookUpdateRequest()
             {
-                Title = baseRequest.Title,
-                Author = baseRequest.Author,
-                Description = baseRequest.Description,
-                NumberOfPages = baseRequest.NumberOfPages,
-                ReleaseDate = baseRequest.ReleaseDate,
-                Price = baseRequest.NumberOfPages,
+                Id = updateRequest.Id,
+                Title = updateRequest.Title,
+                Author = updateRequest.Author,
+                Description = updateRequest.Description,
+                NumberOfPages = updateRequest.NumberOfPages,
+                ReleaseDate = updateRequest.ReleaseDate,
+                Price = updateRequest.NumberOfPages,
                 BookCategory = bookCategory,
                 LanguageCategory = languageCategory
             };
@@ -101,7 +104,7 @@ namespace EvidenceKnih.Controllers
         }
 
         [HttpDelete(nameof(DeleteBook))]
-        public ActionResult DeleteBook(int id)
+        public ActionResult DeleteBook([Required] int id)
         {
             _bookManagment.DeleteBook(id);
 
