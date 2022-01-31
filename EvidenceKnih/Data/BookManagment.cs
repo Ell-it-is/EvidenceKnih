@@ -42,6 +42,7 @@ namespace EvidenceKnih.Data
             _context.SaveChanges();
             
             response.BookId = book.Entity.Id;
+            response.Book = MapBookToBookResponse(book.Entity);
             return response;
         }
 

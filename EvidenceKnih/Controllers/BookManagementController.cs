@@ -64,9 +64,9 @@ namespace EvidenceKnih.Controllers
                 LanguageCategory = languageCategory,
             };
             
-            _bookManagment.CreateBook(bookCreateRequest);
+            var book = _bookManagment.CreateBook(bookCreateRequest);
 
-            return Ok("Kniha vytvořena.");
+            return Created($"api/v1/getBook/{book.BookId}", book.BookId);
         }
 
         [HttpGet(nameof(GetBook))]
@@ -84,6 +84,8 @@ namespace EvidenceKnih.Controllers
         {
             var books = _bookManagment.GetBooksInStock();
 
+            if (!books.Any()) return NotFound();
+            
             return Ok(books);
         }
 
