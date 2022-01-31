@@ -15,7 +15,7 @@ namespace Contracts.Api.Requests
         [MaxLength(3000)]
         public string Description { get; set; }
         public int NumberOfPages { get; set; }
-        public DateTime ReleaseDate { get; set; } //(I could add available property for books that are not yet released)
+        public DateTime ReleaseDate { get; set; }
         public decimal Price { get; set; }
         [DefaultValue(1)]
         public int Quantity { get; set; }
