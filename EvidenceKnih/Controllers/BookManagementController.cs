@@ -11,6 +11,7 @@ using EvidenceKnih.Data;
 using EvidenceKnih.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.ModelBinding;
 using Microsoft.Extensions.Logging;
@@ -36,8 +37,10 @@ namespace EvidenceKnih.Controllers
             _bookManagment = bookManagment;
             _tokenAuthService = tokenAuthService;
         }
-
+        
         [AllowAnonymous]
+        [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
         [HttpPost(nameof(Login))]
         public ActionResult Login()
         {
@@ -45,11 +48,14 @@ namespace EvidenceKnih.Controllers
             
             if (string.IsNullOrEmpty(token)) return Unauthorized();
 
+            _logger.LogInformation("JWT vygenerován");
             return Ok(token);
         }
 
+        [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(CreateBookResponse), StatusCodes.Status201Created)]
         [HttpPost(nameof(CreateBook))]
-        public async Task<ActionResult> CreateBook([FromBody] BookBaseRequest baseRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
+        public async Task<ActionResult<CreateBookResponse>> CreateBook([FromBody] BookBaseRequest baseRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
         {
             var bookCreateRequest = new BookCreateRequest()
             {
@@ -66,19 +72,27 @@ namespace EvidenceKnih.Controllers
             
             var book = await _bookManagment.CreateBook(bookCreateRequest);
 
-            return Created($"api/v1/getBook/{book.BookId}", book.BookId);
+            _logger.LogInformation("Kniha založena");
+            return Created($"api/v1/{nameof(GetBook)}/{book.BookId}", book);
         }
 
+        [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(GetBookResponse), StatusCodes.Status200OK)]
         [HttpGet(nameof(GetBook))]
-        public async Task<ActionResult<CreateBookResponse>> GetBook([Required] int id)
+        public async Task<ActionResult<GetBookResponse>> GetBook([Required] int id)
         {
             var book = await _bookManagment.GetBook(id);
 
             if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
 
+            _logger.LogInformation("Kniha nalezena");
             return Ok(book.BookResponse);
         }
         
+        [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(IEnumerable<BookResponse>), StatusCodes.Status200OK)]
         [HttpGet(nameof(GetBooksInStock))]
         public async Task<ActionResult<IEnumerable<BookResponse>>> GetBooksInStock()
         {
@@ -86,11 +100,15 @@ namespace EvidenceKnih.Controllers
 
             if (!books.Any()) return NotFound();
             
+            _logger.LogInformation("Nalezen požadovaný seznam knih");
             return Ok(books);
         }
 
+        [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(UpdateBookResponse), StatusCodes.Status200OK)]
         [HttpPut(nameof(UpdateBook))]
-        public async Task<ActionResult> UpdateBook([FromBody] BookUpdateRequest updateRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
+        public async Task<ActionResult<UpdateBookResponse>> UpdateBook([FromBody] BookUpdateRequest updateRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
         {
             var bookUpdateRequest = new BookUpdateRequest()
             {
@@ -110,17 +128,22 @@ namespace EvidenceKnih.Controllers
             
             if (response.ErrorResponse.Errors.Any()) return NotFound(response.ErrorResponse);
 
-            return Ok("Kniha aktualizována.");
+            _logger.LogInformation("Kniha aktualizována");
+            return Ok(response);
         }
 
+        [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
+        [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
+        [ProducesResponseType(typeof(DeleteBookResponse), StatusCodes.Status200OK)]
         [HttpDelete(nameof(DeleteBook))]
-        public async Task<ActionResult> DeleteBook([Required] int id)
+        public async Task<ActionResult<DeleteBookResponse>> DeleteBook([Required] int id)
         {
             var book = await _bookManagment.DeleteBook(id);
             
             if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
 
-            return Ok("Kniha smazána.");
+            _logger.LogInformation("Kniha smazána");
+            return Ok(book);
         }
     }
 }
