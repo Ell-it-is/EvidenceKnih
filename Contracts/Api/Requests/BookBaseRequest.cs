@@ -17,7 +17,6 @@ namespace Contracts.Api.Requests
         public int NumberOfPages { get; set; }
         public DateTime ReleaseDate { get; set; }
         public decimal Price { get; set; }
-        [DefaultValue(1)]
-        public int Quantity { get; set; }
+        public int Quantity { get; set; } = 1;
     }
 }

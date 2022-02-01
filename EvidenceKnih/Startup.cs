@@ -1,11 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
+using Contracts.Database;
+using Contracts.Database.Enums;
 using EvidenceKnih.Data;
 using EvidenceKnih.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -49,19 +52,12 @@ namespace EvidenceKnih
                     };
                 });
 
-            services.AddSingleton<ITokenAuthService, TokenAuthService>();
-            services.AddScoped<IBookManagment, BookManagment>();
-
-            services.AddControllers()
-                .AddJsonOptions(options =>
-                {
-                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
-                });
-
             services.AddDbContext<EvidenceKnihContext>(opt =>
             {
+                opt.UseInMemoryDatabase(databaseName: "EvidenceKnihIM");
                 opt.UseLazyLoadingProxies();
-                opt.UseSqlServer(Configuration.GetConnectionString("EvidenceKnih"));
+
+                //opt.UseSqlServer(Configuration.GetConnectionString("EvidenceKnih"));
             });
 
             services.AddSwaggerGen(c =>
@@ -103,6 +99,15 @@ namespace EvidenceKnih
 
                 c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
             });
+            
+            services.AddSingleton<ITokenAuthService, TokenAuthService>();
+            services.AddScoped<IBookManagment, BookManagment>();
+
+            services.AddControllers()
+                .AddJsonOptions(options =>
+                {
+                    options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
+                });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

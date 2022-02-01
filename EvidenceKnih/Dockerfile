@@ -6,6 +6,7 @@ EXPOSE 443
 FROM mcr.microsoft.com/dotnet/sdk:5.0 AS build
 WORKDIR /src
 COPY ["EvidenceKnih/EvidenceKnih.csproj", "EvidenceKnih/"]
+COPY ["Contracts/Contracts.csproj", "Contracts/"]
 RUN dotnet restore "EvidenceKnih/EvidenceKnih.csproj"
 COPY . .
 WORKDIR "/src/EvidenceKnih"
