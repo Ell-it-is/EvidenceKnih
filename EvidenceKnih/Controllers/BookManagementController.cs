@@ -19,7 +19,7 @@ using Microsoft.Extensions.Options;
 namespace EvidenceKnih.Controllers
 {
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v1/")]
     public class BookManagementController : ControllerBase
     {
@@ -49,7 +49,7 @@ namespace EvidenceKnih.Controllers
         }
 
         [HttpPost(nameof(CreateBook))]
-        public ActionResult CreateBook([FromBody] BookBaseRequest baseRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
+        public async Task<ActionResult> CreateBook([FromBody] BookBaseRequest baseRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
         {
             var bookCreateRequest = new BookCreateRequest()
             {
@@ -64,15 +64,15 @@ namespace EvidenceKnih.Controllers
                 LanguageCategory = languageCategory,
             };
             
-            var book = _bookManagment.CreateBook(bookCreateRequest);
+            var book = await _bookManagment.CreateBook(bookCreateRequest);
 
             return Created($"api/v1/getBook/{book.BookId}", book.BookId);
         }
 
         [HttpGet(nameof(GetBook))]
-        public ActionResult<CreateBookResponse> GetBook([Required] int id)
+        public async Task<ActionResult<CreateBookResponse>> GetBook([Required] int id)
         {
-            var book = _bookManagment.GetBook(id);
+            var book = await _bookManagment.GetBook(id);
 
             if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
 
@@ -80,9 +80,9 @@ namespace EvidenceKnih.Controllers
         }
         
         [HttpGet(nameof(GetBooksInStock))]
-        public ActionResult<IEnumerable<BookResponse>> GetBooksInStock()
+        public async Task<ActionResult<IEnumerable<BookResponse>>> GetBooksInStock()
         {
-            var books = _bookManagment.GetBooksInStock();
+            var books = await _bookManagment.GetBooksInStock();
 
             if (!books.Any()) return NotFound();
             
@@ -90,7 +90,7 @@ namespace EvidenceKnih.Controllers
         }
 
         [HttpPut(nameof(UpdateBook))]
-        public ActionResult UpdateBook([FromBody] BookUpdateRequest updateRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
+        public async Task<ActionResult> UpdateBook([FromBody] BookUpdateRequest updateRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
         {
             var bookUpdateRequest = new BookUpdateRequest()
             {
@@ -106,7 +106,7 @@ namespace EvidenceKnih.Controllers
                 LanguageCategory = languageCategory
             };
             
-            var response = _bookManagment.UpdateBook(bookUpdateRequest);
+            var response = await _bookManagment.UpdateBook(bookUpdateRequest);
             
             if (response.ErrorResponse.Errors.Any()) return NotFound(response.ErrorResponse);
 
@@ -114,9 +114,9 @@ namespace EvidenceKnih.Controllers
         }
 
         [HttpDelete(nameof(DeleteBook))]
-        public ActionResult DeleteBook([Required] int id)
+        public async Task<ActionResult> DeleteBook([Required] int id)
         {
-            var book = _bookManagment.DeleteBook(id);
+            var book = await _bookManagment.DeleteBook(id);
             
             if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
 

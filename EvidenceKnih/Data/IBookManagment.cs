@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using Contracts.Api.Requests;
 using Contracts.Api.Responses;
 using Contracts.Api.Responses.Common;
@@ -7,14 +8,14 @@ namespace EvidenceKnih.Data
 {
     public interface IBookManagment
     {
-        CreateBookResponse CreateBook(BookCreateRequest createRequest);
+        Task<CreateBookResponse> CreateBook(BookCreateRequest createRequest);
 
-        GetBookResponse GetBook(int id);
+        Task<GetBookResponse> GetBook(int id);
 
-        IEnumerable<BookResponse> GetBooksInStock();
+        Task<IEnumerable<BookResponse>> GetBooksInStock();
 
-        UpdateBookResponse UpdateBook(BookUpdateRequest updateRequest);
+        Task<UpdateBookResponse> UpdateBook(BookUpdateRequest updateRequest);
 
-        DeleteBookResponse DeleteBook(int id);
+        Task<DeleteBookResponse> DeleteBook(int id);
     }
 }

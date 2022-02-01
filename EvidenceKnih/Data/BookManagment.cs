@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using Contracts.Api.Requests;
 using Contracts.Api.Responses;
 using Contracts.Api.Responses.Common;
@@ -17,7 +18,7 @@ namespace EvidenceKnih.Data
             _context = context;
         }
 
-        public CreateBookResponse CreateBook(BookCreateRequest createRequest)
+        public async Task<CreateBookResponse> CreateBook(BookCreateRequest createRequest)
         {
             var response = new CreateBookResponse();
             
@@ -39,18 +40,18 @@ namespace EvidenceKnih.Data
                 Quantity = createRequest.Quantity
             };
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
             
             response.BookId = book.Entity.Id;
             response.Book = MapBookToBookResponse(book.Entity);
             return response;
         }
 
-        public GetBookResponse GetBook(int id)
+        public async Task<GetBookResponse> GetBook(int id)
         {
             var response = new GetBookResponse();
             
-            var book = _context.Books.FirstOrDefault(book => book.Id == id);
+            var book = await _context.Books.FirstOrDefaultAsync(book => book.Id == id);
             if (book == null)
             {
                 response.ErrorResponse.Errors.Add(new ErrorModel(nameof(id), "Kniha dle zadaného id nebyla nalezena."));
@@ -66,16 +67,17 @@ namespace EvidenceKnih.Data
             return response;
         }
 
-        public IEnumerable<BookResponse> GetBooksInStock()
+        public async Task<IEnumerable<BookResponse>> GetBooksInStock()
         {
-            return _context.Books.Where(b => b.BookStock.Quantity > 0).ToList().Select(MapBookToBookResponse);
+            var response = await _context.Books.Where(b => b.BookStock.Quantity > 0).ToListAsync();
+            return response.Select(MapBookToBookResponse);
         }
 
-        public UpdateBookResponse UpdateBook(BookUpdateRequest updateRequest)
+        public async Task<UpdateBookResponse> UpdateBook(BookUpdateRequest updateRequest)
         {
             var response = new UpdateBookResponse();
             
-            var bookToUpdate = _context.Books.FirstOrDefault(book => book.Id == updateRequest.Id);
+            var bookToUpdate = await _context.Books.FirstOrDefaultAsync(book => book.Id == updateRequest.Id);
             if (bookToUpdate == null)
             {
                 response.ErrorResponse.Errors.Add(new ErrorModel(nameof(updateRequest.Id), "Kniha dle zadaného id nebyla nalezena."));
@@ -92,16 +94,16 @@ namespace EvidenceKnih.Data
             bookToUpdate.LanguageCategory = updateRequest.LanguageCategory;
             bookToUpdate.BookStock.Quantity = updateRequest.Quantity;
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return response;
         }
 
-        public DeleteBookResponse DeleteBook(int id)
+        public async Task<DeleteBookResponse> DeleteBook(int id)
         {
             var response = new DeleteBookResponse();
             
-            var bookToDelete = _context.Books.FirstOrDefault(book => book.Id == id);
+            var bookToDelete = await _context.Books.FirstOrDefaultAsync(book => book.Id == id);
             if (bookToDelete == null)
             {
                 response.ErrorResponse.Errors.Add(new ErrorModel(nameof(id), "Kniha dle zadaného id nebyla nalezena."));
@@ -110,7 +112,7 @@ namespace EvidenceKnih.Data
 
             _context.Books.Remove(bookToDelete);
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             return response;
         }

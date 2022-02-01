@@ -2,7 +2,7 @@
 services:
   ms-sql-server:
     image: mcr.microsoft.com/mssql/server:latest
-    environment: 
+    environment:
       ACCEPT_EULA: "Y"
       SA_PASSWORD: "S3cretPa55word123"
       MSSQL_PID: Express
@@ -12,6 +12,5 @@ services:
     build:
       context: ..
       dockerfile: ./Dockerfile
-    ports: 
+    ports:
       - "8080:80"
-    
