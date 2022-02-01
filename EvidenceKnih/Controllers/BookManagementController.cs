@@ -38,6 +38,10 @@ namespace EvidenceKnih.Controllers
             _tokenAuthService = tokenAuthService;
         }
         
+        /// <summary>
+        /// Umožňuje vygenerovat JWT
+        /// </summary>
+        /// <returns></returns>
         [AllowAnonymous]
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(string),StatusCodes.Status200OK)]
@@ -52,6 +56,13 @@ namespace EvidenceKnih.Controllers
             return Ok(token);
         }
 
+        /// <summary>
+        /// Založí novou knihu
+        /// </summary>
+        /// <param name="baseRequest"></param>
+        /// <param name="bookCategory"></param>
+        /// <param name="languageCategory"></param>
+        /// <returns></returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(CreateBookResponse), StatusCodes.Status201Created)]
         [HttpPost(nameof(CreateBook))]
@@ -76,6 +87,11 @@ namespace EvidenceKnih.Controllers
             return Created($"api/v1/{nameof(GetBook)}/{book.BookId}", book);
         }
 
+        /// <summary>
+        /// Získá knihu dle id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(GetBookResponse), StatusCodes.Status200OK)]
@@ -90,6 +106,10 @@ namespace EvidenceKnih.Controllers
             return Ok(book.BookResponse);
         }
         
+        /// <summary>
+        /// Získá všechny knihy na skladě
+        /// </summary>
+        /// <returns></returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(IEnumerable<BookResponse>), StatusCodes.Status200OK)]
@@ -104,6 +124,13 @@ namespace EvidenceKnih.Controllers
             return Ok(books);
         }
 
+        /// <summary>
+        /// Aktualizuje informace o knize
+        /// </summary>
+        /// <param name="updateRequest"></param>
+        /// <param name="bookCategory"></param>
+        /// <param name="languageCategory"></param>
+        /// <returns></returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(UpdateBookResponse), StatusCodes.Status200OK)]
@@ -132,6 +159,11 @@ namespace EvidenceKnih.Controllers
             return Ok(response);
         }
 
+        /// <summary>
+        /// Smaže knihu
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(DeleteBookResponse), StatusCodes.Status200OK)]
