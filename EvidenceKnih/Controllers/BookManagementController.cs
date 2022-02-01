@@ -20,7 +20,7 @@ using Microsoft.Extensions.Options;
 namespace EvidenceKnih.Controllers
 {
     [ApiController]
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v1/")]
     public class BookManagementController : ControllerBase
     {

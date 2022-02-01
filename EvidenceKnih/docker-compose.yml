@@ -11,6 +11,8 @@ services:
   evidence-knih:
     build:
       context: ..
-      dockerfile: ./Dockerfile
+      dockerfile: EvidenceKnih/Dockerfile
+    depends_on: 
+      - ms-sql-server
     ports:
       - "8080:80"

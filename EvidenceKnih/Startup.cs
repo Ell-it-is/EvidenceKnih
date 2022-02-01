@@ -54,10 +54,9 @@ namespace EvidenceKnih
 
             services.AddDbContext<EvidenceKnihContext>(opt =>
             {
-                opt.UseInMemoryDatabase(databaseName: "EvidenceKnihIM");
+                //opt.UseInMemoryDatabase(databaseName: "EvidenceKnihIM");
+                opt.UseSqlServer(Configuration.GetConnectionString("EvidenceKnih"));
                 opt.UseLazyLoadingProxies();
-
-                //opt.UseSqlServer(Configuration.GetConnectionString("EvidenceKnih"));
             });
 
             services.AddSwaggerGen(c =>
@@ -112,6 +111,12 @@ namespace EvidenceKnih
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope())
+            {
+                var context = serviceScope?.ServiceProvider.GetRequiredService<EvidenceKnihContext>();
+                context?.Database.Migrate();
+            }
+            
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
