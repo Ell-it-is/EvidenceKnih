@@ -6,11 +6,11 @@
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Debug' ">
-      <DocumentationFile>bin\Debug\EvidenceKnih.xml</DocumentationFile>
+      <DocumentationFile>obj\Debug\EvidenceKnih.xml</DocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup Condition=" '$(Configuration)' == 'Release' ">
-      <DocumentationFile>bin\Release\EvidenceKnih.xml</DocumentationFile>
+      <DocumentationFile>obj\Release\EvidenceKnih.xml</DocumentationFile>
     </PropertyGroup>
 
     <PropertyGroup>
