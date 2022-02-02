@@ -13,6 +13,7 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 
@@ -98,11 +99,16 @@ namespace EvidenceKnih.Controllers
                     BookCategory = bookCategory,
                     LanguageCategory = languageCategory,
                 };
-            
+
                 var book = await _bookManagment.CreateBook(bookCreateRequest);
 
                 _logger.LogInformation("Kniha založena");
-                return Created($"api/v1/{nameof(GetBook)}/{book.BookId}", book);   
+                return Created($"api/v1/{nameof(GetBook)}/{book.BookId}", book);
+            }
+            catch (DbUpdateException dbException)
+            {
+                _logger.LogError(dbException, "{0}, došlo k chybě při uložení do databáze.", nameof(CreateBook));
+                return BadRequest(dbException.Message);                
             }
             catch (Exception e)
             {
@@ -203,6 +209,11 @@ namespace EvidenceKnih.Controllers
                 _logger.LogInformation("Kniha aktualizována");
                 return Ok(response);   
             }
+            catch (DbUpdateException dbException)
+            {
+                _logger.LogError(dbException, "{0}, došlo k chybě při uložení do databáze.", nameof(CreateBook));
+                return BadRequest(dbException.Message);                
+            }
             catch (Exception e)
             {
                 _logger.LogError(e, "{0}", nameof(UpdateBook));
@@ -230,6 +241,11 @@ namespace EvidenceKnih.Controllers
 
                 _logger.LogInformation("Kniha smazána");
                 return Ok(book);    
+            }
+            catch (DbUpdateException dbException)
+            {
+                _logger.LogError(dbException, "{0}, došlo k chybě při uložení do databáze.", nameof(CreateBook));
+                return BadRequest(dbException.Message);                
             }
             catch (Exception e)
             {
