@@ -87,6 +87,8 @@ namespace EvidenceKnih.Controllers
             };
 
             var book = await _bookManagment.CreateBook(bookCreateRequest);
+            
+            if (book.ErrorResponse.Errors.Any()) return BadRequest(book.ErrorResponse);
 
             _logger.LogInformation("Kniha založena");
             return Created($"api/v1/{nameof(GetBook)}/{book.BookId}", book);
