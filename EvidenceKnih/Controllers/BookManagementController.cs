@@ -20,7 +20,7 @@ using Microsoft.Extensions.Options;
 namespace EvidenceKnih.Controllers
 {
     [ApiController]
-    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [Route("api/v1/")]
     public class BookManagementController : ControllerBase
     {
@@ -60,8 +60,8 @@ namespace EvidenceKnih.Controllers
         /// Založí novou knihu
         /// </summary>
         /// <param name="baseRequest"></param>
-        /// <param name="bookCategory"></param>
-        /// <param name="languageCategory"></param>
+        /// <param name="bookCategory">Kategorie knihy</param>
+        /// <param name="languageCategory">Jazyk knihy</param>
         /// <returns></returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(CreateBookResponse), StatusCodes.Status201Created)]
@@ -90,7 +90,7 @@ namespace EvidenceKnih.Controllers
         /// <summary>
         /// Získá knihu dle id
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Id</param>
         /// <returns></returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
@@ -128,8 +128,8 @@ namespace EvidenceKnih.Controllers
         /// Aktualizuje informace o knize
         /// </summary>
         /// <param name="updateRequest"></param>
-        /// <param name="bookCategory"></param>
-        /// <param name="languageCategory"></param>
+        /// <param name="bookCategory">Kategorie knihy</param>
+        /// <param name="languageCategory">Jazyk knihy</param>
         /// <returns></returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
@@ -162,7 +162,7 @@ namespace EvidenceKnih.Controllers
         /// <summary>
         /// Smaže knihu
         /// </summary>
-        /// <param name="id"></param>
+        /// <param name="id">Id</param>
         /// <returns></returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]

@@ -22,6 +22,12 @@ namespace EvidenceKnih.Data
         {
             var response = new CreateBookResponse();
             
+            if (createRequest.Quantity is 0)
+            {  
+                response.ErrorResponse.Errors.Add(new ErrorModel(nameof(createRequest.Quantity), "Při založení knihy musí být přidána aspoň jedna kniha."));
+                return response;
+            }
+
             var book = _context.Books.Add(new Book
             {
                 Title = createRequest.Title,
