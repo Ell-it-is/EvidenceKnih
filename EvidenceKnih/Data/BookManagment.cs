@@ -9,6 +9,9 @@ using Microsoft.EntityFrameworkCore;
 
 namespace EvidenceKnih.Data
 {
+    /// <summary>
+    /// Operace pro správu databáze 'EvidenceKnih'
+    /// </summary>
     public class BookManagment : IBookManagment
     {
         private readonly EvidenceKnihContext _context;
@@ -18,6 +21,11 @@ namespace EvidenceKnih.Data
             _context = context;
         }
 
+        /// <summary>
+        /// Založí novou knihu
+        /// </summary>
+        /// <param name="createRequest"></param>
+        /// <returns></returns>
         public async Task<CreateBookResponse> CreateBook(BookCreateRequest createRequest)
         {
             var response = new CreateBookResponse();
@@ -53,6 +61,11 @@ namespace EvidenceKnih.Data
             return response;
         }
 
+        /// <summary>
+        /// Získá knihu dle id
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<GetBookResponse> GetBook(int id)
         {
             var response = new GetBookResponse();
@@ -73,12 +86,21 @@ namespace EvidenceKnih.Data
             return response;
         }
 
+        /// <summary>
+        /// Získá všechny knihy na skladě
+        /// </summary>
+        /// <returns></returns>
         public async Task<IEnumerable<BookResponse>> GetBooksInStock()
         {
             var response = await _context.Books.Where(b => b.BookStock.Quantity > 0).ToListAsync();
             return response.Select(MapBookToBookResponse);
         }
 
+        /// <summary>
+        /// Aktualizuje informace o knize
+        /// </summary>
+        /// <param name="updateRequest"></param>
+        /// <returns></returns>
         public async Task<UpdateBookResponse> UpdateBook(BookUpdateRequest updateRequest)
         {
             var response = new UpdateBookResponse();
@@ -105,6 +127,11 @@ namespace EvidenceKnih.Data
             return response;
         }
 
+        /// <summary>
+        /// Smaže knihu
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
         public async Task<DeleteBookResponse> DeleteBook(int id)
         {
             var response = new DeleteBookResponse();
@@ -123,6 +150,11 @@ namespace EvidenceKnih.Data
             return response;
         }
         
+        /// <summary>
+        /// Namapuje db objekt na API response
+        /// </summary>
+        /// <param name="book"></param>
+        /// <returns></returns>
         private BookResponse MapBookToBookResponse(Book book)
         {
             return new BookResponse()

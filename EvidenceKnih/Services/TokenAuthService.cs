@@ -1,11 +1,13 @@
-﻿using System;
-using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Text;
 using Microsoft.Extensions.Configuration;
 using Microsoft.IdentityModel.Tokens;
 
 namespace EvidenceKnih.Services
 {
+	/// <summary>
+	/// Obsahuje metody pro práci s JWT
+	/// </summary>
 	public class TokenAuthService : ITokenAuthService
 	{
 		private const string SecretKey = "Jwt:SecretKey";
@@ -19,6 +21,10 @@ namespace EvidenceKnih.Services
 			_configuration = configuration;
 		}
 
+		/// <summary>
+		/// Vytvoří nový token
+		/// </summary>
+		/// <returns></returns>
 		public string BuildToken()
 		{
 			var secretKey = _configuration.GetValue<string>(SecretKey);

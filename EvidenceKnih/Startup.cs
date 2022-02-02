@@ -1,26 +1,16 @@
 using System;
-using System.Collections.Generic;
-using System.Diagnostics;
 using System.IO;
-using System.Linq;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
-using System.Threading.Tasks;
-using Contracts.Database;
-using Contracts.Database.Enums;
 using EvidenceKnih.Data;
 using EvidenceKnih.Services;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -54,7 +44,7 @@ namespace EvidenceKnih
 
             services.AddDbContext<EvidenceKnihContext>(opt =>
             {
-                //opt.UseInMemoryDatabase(databaseName: "EvidenceKnihIM");
+                //opt.UseInMemoryDatabase(databaseName: "EvidenceKnihIM"); //Možné použít při testování, bez vystavení databáze
                 opt.UseSqlServer(Configuration.GetConnectionString("EvidenceKnih"));
                 opt.UseLazyLoadingProxies();
             });

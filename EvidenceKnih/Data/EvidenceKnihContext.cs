@@ -10,7 +10,14 @@ namespace EvidenceKnih.Data
             
         }
 
+        /// <summary>
+        /// Knihy
+        /// </summary>
         public DbSet<Book> Books { get; set; }
+        
+        /// <summary>
+        /// Knihy na skladě
+        /// </summary>
         public DbSet<BookStock> Stocks { get; set; }
     }
 }
