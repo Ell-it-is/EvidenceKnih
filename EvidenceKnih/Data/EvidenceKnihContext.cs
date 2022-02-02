@@ -5,10 +5,7 @@ namespace EvidenceKnih.Data
 {
     public class EvidenceKnihContext : DbContext
     {
-        public EvidenceKnihContext(DbContextOptions options) : base(options)
-        {
-            
-        }
+        public EvidenceKnihContext(DbContextOptions options) : base(options) { }
 
         /// <summary>
         /// Knihy

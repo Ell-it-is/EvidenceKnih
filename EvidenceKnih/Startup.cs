@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
 using EvidenceKnih.Data;
+using EvidenceKnih.Filters;
 using EvidenceKnih.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -21,6 +22,9 @@ using Microsoft.OpenApi.Models;
 
 namespace EvidenceKnih
 {
+    /// <summary>
+    /// Configuration of application's components
+    /// </summary>
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -30,8 +34,10 @@ namespace EvidenceKnih
 
         public IConfiguration Configuration { get; }
 
+        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            // JWT authentication to protect swagger resources
             services.AddAuthentication()
                 .AddJwtBearer(options =>
                 {
@@ -47,6 +53,7 @@ namespace EvidenceKnih
                     };
                 });
 
+            // Prepared localization
             services.Configure<RequestLocalizationOptions>(options =>
             {
                 var supportedCultures = new[]
@@ -67,6 +74,7 @@ namespace EvidenceKnih
             
             services.AddLocalization(options => options.ResourcesPath = "Resources");
             
+            // Adding Entity framework's DbContext 
             services.AddDbContext<EvidenceKnihContext>(opt =>
             {
                 //opt.UseInMemoryDatabase(databaseName: "EvidenceKnihIM"); //Možné použít při testování, bez vystavení databáze
@@ -74,6 +82,7 @@ namespace EvidenceKnih
                 opt.UseLazyLoadingProxies();
             });
 
+            // Adding Swagger
             services.AddSwaggerGen(c =>
             {
                 c.SwaggerDoc("v1", new OpenApiInfo
@@ -114,24 +123,32 @@ namespace EvidenceKnih
                 c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
             });
 
+            // Service registration
             services.AddSingleton<ITokenAuthService, TokenAuthService>();
             services.AddScoped<IBookManagment, BookManagment>();
 
-            services.AddControllers()
+            // Adds services for controllers
+            services.AddControllers(options =>
+                {
+                    options.Filters.Add<GlobalExceptionFilter>();
+                })
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
                 });
         }
 
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
+            // Used to apply migrations before an attempt to connect to the database.
             using (var serviceScope = app.ApplicationServices.GetService<IServiceScopeFactory>()?.CreateScope())
             {
                 var context = serviceScope?.ServiceProvider.GetRequiredService<EvidenceKnihContext>();
                 context?.Database.Migrate();
             }
          
+            // Adds Localization for requests
             var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
             app.UseRequestLocalization(locOptions?.Value);
             
@@ -140,6 +157,7 @@ namespace EvidenceKnih
                 app.UseDeveloperExceptionPage();
             }
 
+            // Specify swagger routing
             app.UseSwagger(c =>
             {
                 c.RouteTemplate = "{documentName}/swagger.json";

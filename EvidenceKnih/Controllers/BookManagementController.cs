@@ -42,9 +42,9 @@ namespace EvidenceKnih.Controllers
         }
         
         /// <summary>
-        /// Umožňuje vygenerovat JWT
+        /// Umožňuje vygenerovat Json Web Token (JWT), použijte k přihlášení přes tlačítko 'authorize'.
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Jwt</returns>
         [AllowAnonymous]
         [ProducesResponseType(typeof(string), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
@@ -73,12 +73,13 @@ namespace EvidenceKnih.Controllers
         }
 
         /// <summary>
-        /// Založí novou knihu
+        /// Založí novou knihu.
+        /// Je třeba vložit alespoň jednu knihu.
         /// </summary>
-        /// <param name="baseRequest"></param>
+        /// <param name="baseRequest">Detaily knihy</param>
         /// <param name="bookCategory">Kategorie knihy</param>
         /// <param name="languageCategory">Jazyk knihy</param>
-        /// <returns></returns>
+        /// <returns>Novou knihu</returns>
         [ProducesResponseType(typeof(CreateBookResponse), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(CreateBookResponse), StatusCodes.Status201Created)]
@@ -118,10 +119,10 @@ namespace EvidenceKnih.Controllers
         }
 
         /// <summary>
-        /// Získá knihu dle id
+        /// Získá knihu dle Id
         /// </summary>
-        /// <param name="id">Id</param>
-        /// <returns></returns>
+        /// <param name="id">Jednoznačný identifikátor knihy v DB</param>
+        /// <returns>Knihu</returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse),StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
@@ -131,6 +132,7 @@ namespace EvidenceKnih.Controllers
         {
             try
             {
+                
                 var book = await _bookManagment.GetBook(id);
 
                 if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
@@ -148,7 +150,7 @@ namespace EvidenceKnih.Controllers
         /// <summary>
         /// Získá všechny knihy na skladě
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Seznam knih</returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse),StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
@@ -175,10 +177,10 @@ namespace EvidenceKnih.Controllers
         /// <summary>
         /// Aktualizuje informace o knize
         /// </summary>
-        /// <param name="updateRequest"></param>
+        /// <param name="updateRequest">Detaily knihy</param>
         /// <param name="bookCategory">Kategorie knihy</param>
         /// <param name="languageCategory">Jazyk knihy</param>
-        /// <returns></returns>
+        /// <returns>Aktualizovanou knihu</returns>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse),StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]
@@ -224,8 +226,7 @@ namespace EvidenceKnih.Controllers
         /// <summary>
         /// Smaže knihu
         /// </summary>
-        /// <param name="id">Id</param>
-        /// <returns></returns>
+        /// <param name="id">Jednoznačný identifikátor knihy v DB</param>
         [ProducesResponseType(typeof(string),StatusCodes.Status401Unauthorized)]
         [ProducesResponseType(typeof(ErrorResponse),StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ErrorResponse), StatusCodes.Status404NotFound)]

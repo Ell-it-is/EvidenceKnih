@@ -22,7 +22,8 @@ namespace EvidenceKnih.Data
         }
 
         /// <summary>
-        /// Založí novou knihu
+        /// Založí novou knihu 
+        /// Je třeba vložit alespoň jednu knihu. (Book.Quantity > 0)
         /// </summary>
         /// <param name="createRequest"></param>
         /// <returns></returns>
@@ -30,6 +31,7 @@ namespace EvidenceKnih.Data
         {
             var response = new CreateBookResponse();
             
+            // Kontrola jestliže byla vložena alespoň jedna kniha.
             if (createRequest.Quantity is 0)
             {  
                 response.ErrorResponse.Errors.Add(new ErrorModel(nameof(createRequest.Quantity), "Při založení knihy musí být přidána aspoň jedna kniha."));
@@ -62,10 +64,10 @@ namespace EvidenceKnih.Data
         }
 
         /// <summary>
-        /// Získá knihu dle id
+        /// Získá knihu dle Id
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Jednoznačný identifikátor knihy v DB</param>
+        /// <returns>Knihu</returns>
         public async Task<GetBookResponse> GetBook(int id)
         {
             var response = new GetBookResponse();
@@ -87,9 +89,9 @@ namespace EvidenceKnih.Data
         }
 
         /// <summary>
-        /// Získá všechny knihy na skladě
+        /// Získá všechny knihy na skladě (Book.Quantity > 0)
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Seznam knih</returns>
         public async Task<IEnumerable<BookResponse>> GetBooksInStock()
         {
             var response = await _context.Books.Where(b => b.BookStock.Quantity > 0).ToListAsync();
@@ -99,12 +101,13 @@ namespace EvidenceKnih.Data
         /// <summary>
         /// Aktualizuje informace o knize
         /// </summary>
-        /// <param name="updateRequest"></param>
-        /// <returns></returns>
+        /// <param name="updateRequest">Detaily knihy</param>
+        /// <returns>Aktualizovanou knihu</returns>
         public async Task<UpdateBookResponse> UpdateBook(BookUpdateRequest updateRequest)
         {
             var response = new UpdateBookResponse();
             
+            // Nalezne knihu k aktualizaci
             var bookToUpdate = await _context.Books.FirstOrDefaultAsync(book => book.Id == updateRequest.Id);
             if (bookToUpdate == null)
             {
@@ -130,12 +133,12 @@ namespace EvidenceKnih.Data
         /// <summary>
         /// Smaže knihu
         /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
+        /// <param name="id">Jednoznačný identifikátor knihy v DB</param>
         public async Task<DeleteBookResponse> DeleteBook(int id)
         {
             var response = new DeleteBookResponse();
             
+            // Nalezne knihu k smazani
             var bookToDelete = await _context.Books.FirstOrDefaultAsync(book => book.Id == id);
             if (bookToDelete == null)
             {
@@ -154,7 +157,7 @@ namespace EvidenceKnih.Data
         /// Namapuje db objekt na API response
         /// </summary>
         /// <param name="book"></param>
-        /// <returns></returns>
+        /// <returns>BookResponse</returns>
         private BookResponse MapBookToBookResponse(Book book)
         {
             return new BookResponse()

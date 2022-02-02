@@ -8,7 +8,7 @@
         /// <summary>
         /// Vytvoří nový token
         /// </summary>
-        /// <returns></returns>
+        /// <returns>Jwt</returns>
         string BuildToken();
     }
 }

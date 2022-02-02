@@ -24,11 +24,16 @@ namespace EvidenceKnih.Services
 		/// <summary>
 		/// Vytvoří nový token
 		/// </summary>
-		/// <returns></returns>
+		/// <returns>Jwt</returns>
 		public string BuildToken()
 		{
+			// secretKey - secret known only to the issuer, used for hashing
 			var secretKey = _configuration.GetValue<string>(SecretKey);
+
+			// issuer - Who issued the Jwt
 			var issuer = _configuration.GetValue<string>(Issuer);
+			
+			// audience - Who is the Jwt intended for
 			var audience = _configuration.GetValue<string>(Audience);
 
 			var securityKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(secretKey));
