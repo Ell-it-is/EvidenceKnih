@@ -5,6 +5,7 @@ using System.IO;
 using System.Reflection;
 using System.Text;
 using System.Text.Json.Serialization;
+using Contracts.Api.Responses.Common;
 using EvidenceKnih.Data;
 using EvidenceKnih.Filters;
 using EvidenceKnih.Services;
@@ -117,10 +118,15 @@ namespace EvidenceKnih
                     }
                 });
                 
+                // Přidá dokumentaci z xml komentářů pro projekt 'EvidenceKnih'
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
-
                 c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
+                
+                // Přidá dokumentaci z xml komentářů pro projekt 'Contracts'
+                xmlFile = $"{typeof(BookResponse).Assembly.GetName().Name}.xml";
+                xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
+                c.IncludeXmlComments(xmlPath);
             });
 
             // Service registration

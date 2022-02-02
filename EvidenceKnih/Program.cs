@@ -14,7 +14,7 @@ namespace EvidenceKnih
             CreateHostBuilder(args).Build().Run();
         }
 
-        // Creates web host
+        // Creates a web host
         public static IHostBuilder CreateHostBuilder(string[] args) =>
             Host.CreateDefaultBuilder(args)
                 .ConfigureWebHostDefaults(webBuilder => { webBuilder.UseStartup<Startup>(); });

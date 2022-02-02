@@ -1,0 +1,349 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>Contracts</name>
+    </assembly>
+    <members>
+        <member name="T:Contracts.Api.Requests.BookBaseRequest">
+            <summary>
+            Bázová třída pro požadavek knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookBaseRequest.Title">
+            <summary>
+            Název knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookBaseRequest.Author">
+            <summary>
+            Autor
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookBaseRequest.Description">
+            <summary>
+            Popis
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookBaseRequest.NumberOfPages">
+            <summary>
+            Počet stran
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookBaseRequest.ReleaseDate">
+            <summary>
+            Datum vydání
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookBaseRequest.Price">
+            <summary>
+            Cena
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookBaseRequest.Quantity">
+            <summary>
+            Počet kusů na skladě
+            </summary>
+        </member>
+        <member name="T:Contracts.Api.Requests.BookCreateRequest">
+            <summary>
+            Požadavek knihy pro její založení
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookCreateRequest.BookCategory">
+            <summary>
+            kategorie 
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookCreateRequest.LanguageCategory">
+            <summary>
+            Jazyk
+            </summary>
+        </member>
+        <member name="T:Contracts.Api.Requests.BookUpdateRequest">
+            <summary>
+            Požadavek knihy pro její aktualizaci
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookUpdateRequest.Id">
+            <summary>
+            Jednoznačný identifikátor knihy v DB
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookUpdateRequest.BookCategory">
+            <summary>
+            Kategorie
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Requests.BookUpdateRequest.LanguageCategory">
+            <summary>
+            Jazyk
+            </summary>
+        </member>
+        <member name="T:Contracts.Api.Responses.Common.BookResponse">
+            <summary>
+            Detail knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.BookResponse.Title">
+            <summary>
+            Název knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.BookResponse.Author">
+            <summary>
+            Autor
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.BookResponse.Description">
+            <summary>
+            Popis
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.BookResponse.NumberOfPages">
+            <summary>
+            Počet stran
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.BookResponse.ReleaseDate">
+            <summary>
+            Datum vydání
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.BookResponse.BookCategory">
+            <summary>
+            Kategorie
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.BookResponse.LanguageCategory">
+            <summary>
+            Jazyk
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.BookResponse.Price">
+            <summary>
+            Cena
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.BookResponse.Quantity">
+            <summary>
+            Počet kusů na skladě
+            </summary>
+        </member>
+        <member name="T:Contracts.Api.Responses.Common.ErrorResponse">
+            <summary>
+            Seznam chyb
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.ErrorResponse.Errors">
+            <summary>
+            List chyb
+            </summary>
+        </member>
+        <member name="T:Contracts.Api.Responses.Common.ErrorModel">
+            <summary>
+            </summary>
+        </member>
+        <member name="M:Contracts.Api.Responses.Common.ErrorModel.#ctor(System.String,System.String)">
+            <summary>
+            </summary>
+            <param name="fieldName">K jakému objektu se chyba vztahuje</param>
+            <param name="message">Zpráva o chybě</param>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.ErrorModel.FieldName">
+            <summary>
+            Pole, které vyvolalo chybu
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.Common.ErrorModel.Message">
+            <summary>
+            Text chyby
+            </summary>
+        </member>
+        <member name="M:Contracts.Api.Responses.Common.ErrorModel.ToString">
+            <summary>
+            </summary>
+        </member>
+        <member name="T:Contracts.Api.Responses.CreateBookResponse">
+            <summary>
+            Odpověď na založení nové knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.CreateBookResponse.BookId">
+            <summary>
+            Jednoznačný identifikátor knihy v DB
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.CreateBookResponse.Book">
+            <summary>
+            Detaily knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.CreateBookResponse.ErrorResponse">
+            <summary>
+            Seznam chyb
+            </summary>
+        </member>
+        <member name="T:Contracts.Api.Responses.DeleteBookResponse">
+            <summary>
+            Odpověď na smazání knihy
+            </summary>
+        </member>
+        <member name="T:Contracts.Api.Responses.GetBookResponse">
+            <summary>
+            Odpověď na úspěšné nalezení knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.GetBookResponse.BookResponse">
+            <summary>
+            Detail knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.GetBookResponse.ErrorResponse">
+            <summary>
+            Seznam chyb
+            </summary>
+        </member>
+        <member name="T:Contracts.Api.Responses.UpdateBookResponse">
+            <summary>
+            Odpověď na aktualizaci knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Api.Responses.UpdateBookResponse.ErrorResponse">
+            <summary>
+            Seznam chyb
+            </summary>
+        </member>
+        <member name="T:Contracts.Database.Book">
+            <summary>
+            EF entita: Kniha
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.Book.Id">
+            <summary>
+            Jednoznačný identifikátor knihy v DB
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.Book.Title">
+            <summary>
+            Název knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.Book.Author">
+            <summary>
+            Autor
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.Book.Description">
+            <summary>
+            Popis
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.Book.NumberOfPages">
+            <summary>
+            Počet stran
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.Book.ReleaseDate">
+            <summary>
+            Datum vydání
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.Book.BookCategory">
+            <summary>
+            Kategorie
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.Book.LanguageCategory">
+            <summary>
+            Jazyk
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.Book.Price">
+            <summary>
+            Cena
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.Book.BookStock">
+            <summary>
+            Odkaz na sklad knihy.
+            One to One relationship
+            </summary>
+        </member>
+        <member name="T:Contracts.Database.BookStock">
+            <summary>
+            EF entita: Sklad knihy
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.BookStock.BookStockId">
+            <summary>
+            Cízy klíč na knihu
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.BookStock.Quantity">
+            <summary>
+            Počet kusů na skladě
+            </summary>
+        </member>
+        <member name="P:Contracts.Database.BookStock.Book">
+            <summary>
+            Odkaz na knihu
+            One to One relationship
+            </summary>
+        </member>
+        <member name="T:Contracts.Database.Enums.EnumBookCategory">
+            <summary>
+            Výčet kategorií z evidence knih
+            </summary>
+        </member>
+        <member name="F:Contracts.Database.Enums.EnumBookCategory.Fantasy">
+            <summary>
+            Fantasy
+            </summary>
+        </member>
+        <member name="F:Contracts.Database.Enums.EnumBookCategory.Thriller">
+            <summary>
+            Thriller
+            </summary>
+        </member>
+        <member name="F:Contracts.Database.Enums.EnumBookCategory.Horror">
+            <summary>
+            Horor 
+            </summary>
+        </member>
+        <member name="F:Contracts.Database.Enums.EnumBookCategory.Historical">
+            <summary>
+            Historický 
+            </summary>
+        </member>
+        <member name="F:Contracts.Database.Enums.EnumBookCategory.Romance">
+            <summary>
+            Román
+            </summary>
+        </member>
+        <member name="F:Contracts.Database.Enums.EnumBookCategory.Western">
+            <summary>
+            Western
+            </summary>
+        </member>
+        <member name="T:Contracts.Database.Enums.EnumLanguageCategory">
+            <summary>
+            Výčet jazyků z evidence knih
+            </summary>
+        </member>
+        <member name="F:Contracts.Database.Enums.EnumLanguageCategory.Czech">
+            <summary>
+            Český
+            </summary>
+        </member>
+        <member name="F:Contracts.Database.Enums.EnumLanguageCategory.English">
+            <summary>
+            Anglický
+            </summary>
+        </member>
+        <member name="F:Contracts.Database.Enums.EnumLanguageCategory.French">
+            <summary>
+            Francouzský
+            </summary>
+        </member>
+    </members>
+</doc>

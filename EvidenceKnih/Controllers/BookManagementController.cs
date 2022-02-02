@@ -42,7 +42,7 @@ namespace EvidenceKnih.Controllers
         }
         
         /// <summary>
-        /// Umožňuje vygenerovat Json Web Token (JWT), použijte k přihlášení přes tlačítko 'authorize'.
+        /// Umožňuje vygenerovat Json Web Token (JWT), použijte k přihlášení přes tlačítko 'Authorize'.
         /// </summary>
         /// <returns>Jwt</returns>
         [AllowAnonymous]
