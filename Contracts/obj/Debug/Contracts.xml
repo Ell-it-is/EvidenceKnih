@@ -84,6 +84,11 @@
             Detail knihy
             </summary>
         </member>
+        <member name="P:Contracts.Api.Responses.Common.BookResponse.Id">
+            <summary>
+            Jednoznačný identifikátor knihy v DB
+            </summary>
+        </member>
         <member name="P:Contracts.Api.Responses.Common.BookResponse.Title">
             <summary>
             Název knihy

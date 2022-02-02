@@ -1,7 +1,7 @@
 namespace EvidenceKnih.ErrorHandling
 {    
     /// <summary>
-    /// Bazova trida pro 
+    /// Bazova trida pro error handling
     /// </summary>
     /// <typeparam name="T"></typeparam>
     public class ApiResponse<T>
