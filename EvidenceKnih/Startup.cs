@@ -1,4 +1,6 @@
 using System;
+using System.Collections.Generic;
+using System.Globalization;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -7,10 +9,13 @@ using EvidenceKnih.Data;
 using EvidenceKnih.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Localization;
+using Microsoft.AspNetCore.Localization.Routing;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 
@@ -42,6 +47,26 @@ namespace EvidenceKnih
                     };
                 });
 
+            services.Configure<RequestLocalizationOptions>(options =>
+            {
+                var supportedCultures = new[]
+                {
+                    new CultureInfo("cs-CZ"),
+                    new CultureInfo("en-US")
+                };
+
+                options.DefaultRequestCulture = new RequestCulture(culture: "cs-CZ", uiCulture: "cs-CZ");
+                options.SupportedCultures = supportedCultures;
+                options.SupportedUICultures = supportedCultures;
+
+                options.RequestCultureProviders = new List<IRequestCultureProvider>
+                {
+                    new RouteDataRequestCultureProvider()
+                };
+            });
+            
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+            
             services.AddDbContext<EvidenceKnihContext>(opt =>
             {
                 //opt.UseInMemoryDatabase(databaseName: "EvidenceKnihIM"); //Možné použít při testování, bez vystavení databáze
@@ -88,7 +113,7 @@ namespace EvidenceKnih
 
                 c.IncludeXmlComments(xmlPath, includeControllerXmlComments: true);
             });
-            
+
             services.AddSingleton<ITokenAuthService, TokenAuthService>();
             services.AddScoped<IBookManagment, BookManagment>();
 
@@ -106,6 +131,9 @@ namespace EvidenceKnih
                 var context = serviceScope?.ServiceProvider.GetRequiredService<EvidenceKnihContext>();
                 context?.Database.Migrate();
             }
+         
+            var locOptions = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(locOptions?.Value);
             
             if (env.IsDevelopment())
             {
