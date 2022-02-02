@@ -52,24 +52,11 @@ namespace EvidenceKnih.Controllers
         [HttpPost(nameof(Login))]
         public ActionResult Login()
         {
-            try
-            {
-                string token = _tokenAuthService.BuildToken();   
-                if (string.IsNullOrEmpty(token)) return Unauthorized();
+            string token = _tokenAuthService.BuildToken();   
+            if (string.IsNullOrEmpty(token)) return Unauthorized();
 
-                _logger.LogInformation("JWT vygenerován");
-                return Ok(token);
-            }
-            catch (SecurityTokenException e)
-            {
-                _logger.LogWarning(e, "{0}", nameof(Login));
-                return Unauthorized();
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "{0}", nameof(Login));
-                return BadRequest(e.Message);
-            }
+            _logger.LogInformation("JWT vygenerován");
+            return Ok(token);
         }
 
         /// <summary>
@@ -86,36 +73,23 @@ namespace EvidenceKnih.Controllers
         [HttpPost(nameof(CreateBook))]
         public async Task<ActionResult<CreateBookResponse>> CreateBook([FromBody] BookBaseRequest baseRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
         {
-            try
+            var bookCreateRequest = new BookCreateRequest()
             {
-                var bookCreateRequest = new BookCreateRequest()
-                {
-                    Title = baseRequest.Title,
-                    Author = baseRequest.Author,
-                    Description = baseRequest.Description,
-                    NumberOfPages = baseRequest.NumberOfPages,
-                    ReleaseDate = baseRequest.ReleaseDate,
-                    Price = baseRequest.NumberOfPages,
-                    Quantity = baseRequest.Quantity,
-                    BookCategory = bookCategory,
-                    LanguageCategory = languageCategory,
-                };
+                Title = baseRequest.Title,
+                Author = baseRequest.Author,
+                Description = baseRequest.Description,
+                NumberOfPages = baseRequest.NumberOfPages,
+                ReleaseDate = baseRequest.ReleaseDate,
+                Price = baseRequest.NumberOfPages,
+                Quantity = baseRequest.Quantity,
+                BookCategory = bookCategory,
+                LanguageCategory = languageCategory,
+            };
 
-                var book = await _bookManagment.CreateBook(bookCreateRequest);
+            var book = await _bookManagment.CreateBook(bookCreateRequest);
 
-                _logger.LogInformation("Kniha založena");
-                return Created($"api/v1/{nameof(GetBook)}/{book.BookId}", book);
-            }
-            catch (DbUpdateException dbException)
-            {
-                _logger.LogError(dbException, "{0}, došlo k chybě při uložení do databáze.", nameof(CreateBook));
-                return BadRequest(dbException.Message);                
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "{0}", nameof(CreateBook));
-                return BadRequest(e.Message);
-            }
+            _logger.LogInformation("Kniha založena");
+            return Created($"api/v1/{nameof(GetBook)}/{book.BookId}", book);
         }
 
         /// <summary>
@@ -130,21 +104,12 @@ namespace EvidenceKnih.Controllers
         [HttpGet(nameof(GetBook))]
         public async Task<ActionResult<GetBookResponse>> GetBook([Required] int id)
         {
-            try
-            {
-                
-                var book = await _bookManagment.GetBook(id);
+            var book = await _bookManagment.GetBook(id);
 
-                if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
+            if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
 
-                _logger.LogInformation("Kniha nalezena");
-                return Ok(book.BookResponse);   
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "{0}", nameof(GetBook));
-                return BadRequest(e.Message);
-            }
+            _logger.LogInformation("Kniha nalezena");
+            return Ok(book.BookResponse);
         }
         
         /// <summary>
@@ -158,20 +123,12 @@ namespace EvidenceKnih.Controllers
         [HttpGet(nameof(GetBooksInStock))]
         public async Task<ActionResult<IEnumerable<BookResponse>>> GetBooksInStock()
         {
-            try
-            {
-                var books = await _bookManagment.GetBooksInStock();
+            var books = await _bookManagment.GetBooksInStock();
 
-                if (!books.Any()) return NotFound();
+            if (!books.Any()) return NotFound();
 
-                _logger.LogInformation("Nalezen požadovaný seznam knih");
-                return Ok(books);
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "{0}", nameof(GetBooksInStock));
-                return BadRequest(e.Message);
-            }
+            _logger.LogInformation("Nalezen požadovaný seznam knih");
+            return Ok(books);
         }
 
         /// <summary>
@@ -188,39 +145,26 @@ namespace EvidenceKnih.Controllers
         [HttpPut(nameof(UpdateBook))]
         public async Task<ActionResult<UpdateBookResponse>> UpdateBook([FromBody] BookUpdateRequest updateRequest, EnumBookCategory bookCategory, EnumLanguageCategory languageCategory)
         {
-            try
+            var bookUpdateRequest = new BookUpdateRequest()
             {
-                var bookUpdateRequest = new BookUpdateRequest()
-                {
-                    Id = updateRequest.Id,
-                    Title = updateRequest.Title,
-                    Author = updateRequest.Author,
-                    Description = updateRequest.Description,
-                    NumberOfPages = updateRequest.NumberOfPages,
-                    ReleaseDate = updateRequest.ReleaseDate,
-                    Price = updateRequest.NumberOfPages,
-                    Quantity = updateRequest.Quantity,
-                    BookCategory = bookCategory,
-                    LanguageCategory = languageCategory
-                };
-            
-                var response = await _bookManagment.UpdateBook(bookUpdateRequest);
-            
-                if (response.ErrorResponse.Errors.Any()) return NotFound(response.ErrorResponse);
+                Id = updateRequest.Id,
+                Title = updateRequest.Title,
+                Author = updateRequest.Author,
+                Description = updateRequest.Description,
+                NumberOfPages = updateRequest.NumberOfPages,
+                ReleaseDate = updateRequest.ReleaseDate,
+                Price = updateRequest.NumberOfPages,
+                Quantity = updateRequest.Quantity,
+                BookCategory = bookCategory,
+                LanguageCategory = languageCategory
+            };
+        
+            var response = await _bookManagment.UpdateBook(bookUpdateRequest);
+        
+            if (response.ErrorResponse.Errors.Any()) return NotFound(response.ErrorResponse);
 
-                _logger.LogInformation("Kniha aktualizována");
-                return Ok(response);   
-            }
-            catch (DbUpdateException dbException)
-            {
-                _logger.LogError(dbException, "{0}, došlo k chybě při uložení do databáze.", nameof(CreateBook));
-                return BadRequest(dbException.Message);                
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "{0}", nameof(UpdateBook));
-                return BadRequest(e.Message);
-            }
+            _logger.LogInformation("Kniha aktualizována");
+            return Ok(response);
         }
 
         /// <summary>
@@ -234,25 +178,12 @@ namespace EvidenceKnih.Controllers
         [HttpDelete(nameof(DeleteBook))]
         public async Task<ActionResult<DeleteBookResponse>> DeleteBook([Required] int id)
         {
-            try
-            {
-                var book = await _bookManagment.DeleteBook(id);
-            
-                if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
+            var book = await _bookManagment.DeleteBook(id);
+        
+            if (book.ErrorResponse.Errors.Any()) return NotFound(book.ErrorResponse);
 
-                _logger.LogInformation("Kniha smazána");
-                return Ok(book);    
-            }
-            catch (DbUpdateException dbException)
-            {
-                _logger.LogError(dbException, "{0}, došlo k chybě při uložení do databáze.", nameof(CreateBook));
-                return BadRequest(dbException.Message);                
-            }
-            catch (Exception e)
-            {
-                _logger.LogError(e, "{0}", nameof(DeleteBook));
-                return BadRequest(e.Message);
-            }
+            _logger.LogInformation("Kniha smazána");
+            return Ok(book);
         }
     }
 }

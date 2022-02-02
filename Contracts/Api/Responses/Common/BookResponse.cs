@@ -9,6 +9,11 @@ namespace Contracts.Api.Responses.Common
     public class BookResponse
     {
         /// <summary>
+        /// Jednoznačný identifikátor knihy v DB
+        /// </summary>
+        public int Id { get; set; }
+        
+        /// <summary>
         /// Název knihy
         /// </summary>
         public string Title { get; set; }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using System.Net;
 using System.Threading.Tasks;
 using Contracts.Api.Requests;
 using Contracts.Api.Responses;
@@ -162,6 +163,7 @@ namespace EvidenceKnih.Data
         {
             return new BookResponse()
             {
+                Id = book.Id,
                 Title = book.Title,
                 Author = book.Author,
                 Description = book.Description,

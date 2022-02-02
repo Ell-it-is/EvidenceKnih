@@ -7,7 +7,7 @@ using System.Text;
 using System.Text.Json.Serialization;
 using Contracts.Api.Responses.Common;
 using EvidenceKnih.Data;
-using EvidenceKnih.Filters;
+using EvidenceKnih.ErrorHandling;
 using EvidenceKnih.Services;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -134,10 +134,7 @@ namespace EvidenceKnih
             services.AddScoped<IBookManagment, BookManagment>();
 
             // Adds services for controllers
-            services.AddControllers(options =>
-                {
-                    options.Filters.Add<GlobalExceptionFilter>();
-                })
+            services.AddControllers()
                 .AddJsonOptions(options =>
                 {
                     options.JsonSerializerOptions.Converters.Add(new JsonStringEnumConverter());
@@ -175,6 +172,8 @@ namespace EvidenceKnih
             app.UseRouting();
 
             app.UseAuthorization();
+            
+            app.UseMiddleware<ErrorHandlerMiddleware>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }

@@ -35,4 +35,12 @@
       <ProjectReference Include="..\Contracts\Contracts.csproj" />
     </ItemGroup>
 
+    <ItemGroup>
+      <Folder Include="Filters" />
+    </ItemGroup>
+
+    <ItemGroup>
+      <Compile Remove="Filters\GlobalExceptionFilter.cs" />
+    </ItemGroup>
+
 </Project>
